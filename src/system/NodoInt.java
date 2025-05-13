@@ -50,17 +50,14 @@ public class NodoInt {
 		tamaño --;
 	}
 	
-	public LinkedList<NodoInt> getCloseBy() {
-		return nodosCercanos;
-	}
-	
 	public boolean existe(int x, int y, NodoInt siguiente) {
 		if (nodo.x == x && nodo.y == y)
 			return true;
 		if (siguiente.nodo.x == x && siguiente.nodo.y == y)
 			return true;
-		if (siguiente.nodo.x == y)
-			return true;
+		if (siguiente.nodo == null)
+			return false;
+
 		for(int i = 0 ; i < siguiente.nodosCercanos.size() ; i++) {
 			if (siguiente.nodosCercanos.get(i).nodo.x == x && siguiente.nodosCercanos.get(i).nodo.y == y)
 				return true;
@@ -117,6 +114,7 @@ public class NodoInt {
 			if (!existe(piso, graph.aristas.get(piso).get(i).destino, origen)) {
 				temp.add(graph.aristas.get(piso).get(i).peso);
 				temp2.add(i);
+				System.out.println("[" +piso + "," + graph.aristas.get(piso).get(i).destino + "]");
 			}	
 		}
 		for (int i = 0; i < temp.size(); i++) 
@@ -138,18 +136,7 @@ public class NodoInt {
 			n.mostrar();
 		}
 	}
-	public LinkedList<Point> getAllNodes() {
-		LinkedList<Point> temp  = new LinkedList<Point>();
-		temp.add(nodo);
-		for (NodoInt n: nodosCercanos) {
-			temp.addAll(n.getAllNodes());
-		}
-		return temp;
-	}
-	public Point getAllNodes(NodoInt node) {
-		for (NodoInt n: nodosCercanos) {
-			n.getAllNodes();
-		}
-		return nodo;
+	public LinkedList<NodoInt> devolverNodosCercanos(){
+		return nodosCercanos;
 	}
 }
