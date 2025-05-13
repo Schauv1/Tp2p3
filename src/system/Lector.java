@@ -16,14 +16,26 @@ public class Lector {
 	public ArrayList<ArrayList<Coordinate>> coords;
 
 	public Lector() {
-		graphs = graphTaker();
-		coords = coordTaker();
+		graphs = graphTaker("graphs.txt");
+		coords = coordTaker("coords.txt");
+	}
+	
+	public void readNew(String graphFile, String coordsFile) {
+		graphs = null;
+		coords = null;
+		try {
+			graphs = graphTaker(graphFile);
+			coords = coordTaker(coordsFile);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException("Alguno de los archivos seleccionados no existe");
+		}
 	}
 
-	private LinkedList<Grafo> graphTaker () {
+	private LinkedList<Grafo> graphTaker (String file) {
 		LinkedList<Grafo> graphs = new LinkedList<Grafo>();
 		try {
-			File myObj = new File("src/Resources/graphs.txt");
+			File myObj = new File("src/Resources/"+file);
 			String data = "";
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
@@ -38,7 +50,6 @@ public class Lector {
 				else 
 					if (line.charAt(0) == 'v') {
 						graphs.add(new Grafo(Integer.parseInt(line.substring(4))));
-						System.out.println("ok");
 					}
 					else {
 						int[] temp = aristaReader(line);
@@ -65,8 +76,11 @@ public class Lector {
 				lastComma = i;
 			}
 			else {
-				if (line.charAt(i) == ',' && partOfSequence != 0) {
-					sequence[partOfSequence] = Integer.parseInt(line.substring(lastComma+2, i));
+				if (line.charAt(i) == ',' && partOfSequence != 0 || i == line.length()-1) {
+					if (i == line.length()-1)
+						sequence[partOfSequence] = Integer.parseInt(line.substring(lastComma+2, i+1));
+					else
+						sequence[partOfSequence] = Integer.parseInt(line.substring(lastComma+2, i));
 					partOfSequence ++;
 					lastComma = i;
 				}
@@ -75,10 +89,10 @@ public class Lector {
 		return sequence;
 	}
 
-	private ArrayList<ArrayList<Coordinate>> coordTaker () {
+	private ArrayList<ArrayList<Coordinate>> coordTaker (String file) {
 		ArrayList<ArrayList<Coordinate>> coords = new ArrayList<ArrayList<Coordinate>>();
 		try {
-			File myObj = new File("src/Resources/coords.txt");
+			File myObj = new File("src/Resources/"+file);
 			String data = "";
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
