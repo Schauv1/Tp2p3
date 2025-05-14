@@ -139,4 +139,12 @@ public class NodoInt {
 	public LinkedList<NodoInt> devolverNodosCercanos(){
 		return nodosCercanos;
 	}
+	
+	public LinkedList<Point> getAllNodes() {
+		LinkedList<Point> nodes = new LinkedList<Point>();
+		nodes.add(nodo);
+		for (NodoInt n: nodosCercanos)
+			nodes.addAll(n.getAllNodes());
+		return nodes;
+	}
 }
